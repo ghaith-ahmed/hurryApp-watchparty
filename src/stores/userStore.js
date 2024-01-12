@@ -14,6 +14,8 @@ export const useUserStore = defineStore("user", () => {
 
       user.value = data;
     } catch (e) {
+      logout();
+      router.push({ name: "Login" });
       toast.error(e);
     }
   };
