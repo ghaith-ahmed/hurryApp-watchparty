@@ -2,7 +2,7 @@
   <h2
     class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
   >
-    Sign in to your account
+    Create an account
   </h2>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -56,11 +56,11 @@
     </form>
 
     <p class="mt-10 text-center text-sm text-gray-500">
-      Not a member?
+      Have an account ?
       <router-link
-        :to="{ name: 'Register' }"
+        :to="{ name: 'Login' }"
         class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-        >Register</router-link
+        >Login</router-link
       >
     </p>
   </div>
