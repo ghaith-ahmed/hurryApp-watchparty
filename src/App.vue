@@ -1,3 +1,3 @@
 <template>
-  <h1 class="text-3xl text-blue-600">Hello world</h1>
+  <RouterView />
 </template>
