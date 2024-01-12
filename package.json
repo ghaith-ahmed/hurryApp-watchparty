@@ -9,7 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cloudinary/url-gen": "^1.15.0",
+    "@cloudinary/vue": "^1.11.2",
     "axios": "^1.6.5",
+    "filestack-js": "^3.29.0",
     "flowbite": "^2.2.1",
     "flowbite-vue": "^0.1.2",
     "pinia": "^2.1.7",

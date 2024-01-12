@@ -3,6 +3,7 @@ import Login from "../views/Login.vue";
 import AuthLayout from "../views/AuthLayout.vue";
 import Register from "../views/Register.vue";
 import Main from "../views/Main.vue";
+import UploadVideo from "../views/UploadVideo.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,6 +32,13 @@ const router = createRouter({
       path: "/main",
       component: Main,
       meta: { requiresAuth: true },
+      children: [
+        {
+          name: "Upload",
+          path: "/upload",
+          component: UploadVideo,
+        },
+      ],
     },
   ],
 });
