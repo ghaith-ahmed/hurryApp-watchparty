@@ -1,7 +1,7 @@
 <template>
-  <div v-if="user.user" class="container mx-auto">
+  <div v-if="user.user" class="container mx-auto p-4">
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
-      <div class="flex flex-wrap items-center justify-between mx-auto pt-4">
+      <div class="flex flex-wrap items-center justify-between mx-auto">
         <span class="text-3xl font-bold text-emerald-600">WatchParty</span>
         <button
           data-collapse-toggle="navbar-default"
