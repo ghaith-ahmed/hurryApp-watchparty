@@ -6,7 +6,7 @@
   </h2>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6">
+    <div class="space-y-6">
       <div>
         <label
           for="email"
@@ -15,6 +15,7 @@
         >
         <div class="mt-2">
           <input
+            v-model="email"
             id="email"
             name="email"
             type="email"
@@ -35,6 +36,7 @@
         </div>
         <div class="mt-2">
           <input
+            v-model="password"
             id="password"
             name="password"
             type="password"
@@ -47,13 +49,13 @@
 
       <div>
         <button
-          type="submit"
+          @click="login"
           class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Sign in
+          Login
         </button>
       </div>
-    </form>
+    </div>
 
     <p class="mt-10 text-center text-sm text-gray-500">
       Not a member?
@@ -65,3 +67,42 @@
     </p>
   </div>
 </template>
+
+<script setup>
+import axios from "../axios";
+import { useUserStore } from "../stores/userStore";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+import { toast } from "vue-sonner";
+
+const email = ref();
+const password = ref();
+const router = useRouter();
+const user = useUserStore();
+
+const login = async () => {
+  try {
+    const { data } = await axios.post(
+      "/users/login",
+      {
+        email: email.value,
+        password: password.value,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (data.user) {
+      user.user = data.user;
+      localStorage.setItem("token", data.token);
+      router.push({ name: "Main" });
+    }
+  } catch (e) {
+    if (e.response?.data?.error) {
+      return toast.error(e.response.data.error);
+    }
+    return toast.error("Something went wrong");
+  }
+};
+</script>

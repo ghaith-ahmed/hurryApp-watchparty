@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import AuthLayout from "../views/AuthLayout.vue";
 import Register from "../views/Register.vue";
+import Main from "../views/Main.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -11,6 +12,7 @@ const router = createRouter({
       path: "/",
       redirect: "/login",
       component: AuthLayout,
+      meta: { requiresAuth: false },
       children: [
         {
           name: "Login",
@@ -24,7 +26,24 @@ const router = createRouter({
         },
       ],
     },
+    {
+      name: "Main",
+      path: "/main",
+      component: Main,
+      meta: { requiresAuth: true },
+    },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+  if (!to.meta.requiresAuth && token) {
+    next({ name: "Main" });
+  } else if (to.meta.requiresAuth && !token) {
+    next({ name: "Login" });
+  } else {
+    next();
+  }
 });
 
 export default router;
