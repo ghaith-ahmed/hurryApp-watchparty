@@ -5,7 +5,7 @@
         <video
           @pause="pauseVideo"
           @play="playVideo"
-          @playing="changeTimeline"
+          @seeked="changeTimeline"
           class="w-full"
           autoplay
           :src="party.video.url"
@@ -162,8 +162,13 @@ const leaveParty = async () => {
 const pauseVideo = () => socket.emit("paused", party.value._id);
 const playVideo = () => socket.emit("play", party.value._id);
 
-const changeTimeline = (e) =>
-  socket.emit("timeline", party.value._id, user._id, e.timestamp / 1000);
+const changeTimeline = () =>
+  socket.emit(
+    "timeline",
+    party.value._id,
+    user._id,
+    videoEle.value.currentTime
+  );
 
 onMounted(getParty);
 </script>
