@@ -6,7 +6,6 @@
           @pause="pauseVideo"
           @play="playVideo"
           @seeked="changeTimeline"
-          @seeking="!isSeeking ? (isSeeking = true) : null"
           class="w-full"
           autoplay
           :src="party.video.url"
@@ -28,23 +27,7 @@
             Members
           </button>
         </div>
-        <div class="flex flex-col gap-1">
-          <div
-            class="flex gap-2 justify-end items-center p-3 bg-emerald-700 text-white mx-3 rounded-2xl"
-            v-for="member of party.members"
-          >
-            <h1 class="font-medium">
-              {{ member._id == user._id ? "( You ) " : "" }}
-              {{ member.name ?? user.name }}
-            </h1>
-
-            <img
-              class="w-9 h-9 shrink-0 object-cover rounded-full"
-              :src="party.host.profilePic || personPic"
-              alt=""
-            />
-          </div>
-        </div>
+        <Members :members="party.members" />
         <FwbButton
           @click="leaveParty"
           class="absolute bottom-0 w-full !rounded-t-none"
@@ -68,6 +51,7 @@ import { useRouter, useRoute } from "vue-router";
 import personPic from "../../public/profilePerson.png";
 import { useUserStore } from "@/stores/userStore";
 import { io } from "socket.io-client";
+import Members from "../components/Members.vue";
 
 const { user } = useUserStore();
 const party = ref();
@@ -75,7 +59,6 @@ const route = useRoute();
 const router = useRouter();
 const socket = io("http://localhost:3000");
 const videoEle = ref();
-const isSeeking = false;
 
 const getParty = async () => {
   try {
@@ -165,15 +148,12 @@ const pauseVideo = () => socket.emit("paused", party.value._id);
 const playVideo = () => socket.emit("play", party.value._id);
 
 const changeTimeline = () => {
-  if (isSeeking) {
-    isSeeking = false;
-    socket.emit(
-      "timeline",
-      party.value._id,
-      user._id,
-      videoEle.value.currentTime
-    );
-  }
+  socket.emit(
+    "timeline",
+    party.value._id,
+    user._id,
+    videoEle.value.currentTime
+  );
 };
 
 onMounted(getParty);
