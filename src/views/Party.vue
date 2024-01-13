@@ -20,14 +20,20 @@
         class="md:w-1/2 w-full h-[80dvh] relative bg-gray-100 rounded-xl mt-2 md:mt-0"
       >
         <div class="flex w-full mb-3">
-          <button class="w-full hover:bg-gray-200 p-4 font-medium transition">
+          <button
+            @click="page = 'chat'"
+            class="w-full hover:bg-gray-200 p-4 font-medium transition"
+          >
             Chat
           </button>
-          <button class="w-full hover:bg-gray-200 p-4 font-medium transition">
+          <button
+            @click="page = 'members'"
+            class="w-full hover:bg-gray-200 p-4 font-medium transition"
+          >
             Members
           </button>
         </div>
-        <Members :members="party.members" />
+        <Members v-if="page == 'members'" :members="party.members" />
         <FwbButton
           @click="leaveParty"
           class="absolute bottom-0 w-full !rounded-t-none"
@@ -59,6 +65,7 @@ const route = useRoute();
 const router = useRouter();
 const socket = io("http://localhost:3000");
 const videoEle = ref();
+const page = ref("members");
 
 const getParty = async () => {
   try {

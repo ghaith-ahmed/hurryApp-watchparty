@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-1">
     <div
       class="flex gap-2 justify-end items-center p-3 bg-emerald-700 text-white mx-3 rounded-2xl"
-      v-for="member of party.members"
+      v-for="member of members"
     >
       <h1 class="font-medium">
         {{ member._id == user._id ? "( You ) " : "" }}
