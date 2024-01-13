@@ -6,6 +6,7 @@
           @pause="pauseVideo"
           @play="playVideo"
           @seeked="changeTimeline"
+          @seeking="!isSeeking ? (isSeeking = true) : null"
           class="w-full"
           autoplay
           :src="party.video.url"
@@ -74,6 +75,7 @@ const route = useRoute();
 const router = useRouter();
 const socket = io("http://localhost:3000");
 const videoEle = ref();
+const isSeeking = false;
 
 const getParty = async () => {
   try {
@@ -162,13 +164,17 @@ const leaveParty = async () => {
 const pauseVideo = () => socket.emit("paused", party.value._id);
 const playVideo = () => socket.emit("play", party.value._id);
 
-const changeTimeline = () =>
-  socket.emit(
-    "timeline",
-    party.value._id,
-    user._id,
-    videoEle.value.currentTime
-  );
+const changeTimeline = () => {
+  if (isSeeking) {
+    isSeeking = false;
+    socket.emit(
+      "timeline",
+      party.value._id,
+      user._id,
+      videoEle.value.currentTime
+    );
+  }
+};
 
 onMounted(getParty);
 </script>
