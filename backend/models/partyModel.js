@@ -15,6 +15,7 @@ const partySchema = mongoose.Schema(
     code: {
       type: "String",
       required: true,
+      unique: true,
     },
     members: {
       type: [
@@ -23,6 +24,7 @@ const partySchema = mongoose.Schema(
           ref: "User",
         },
       ],
+      default: [],
     },
   },
   {

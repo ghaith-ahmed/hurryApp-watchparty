@@ -3,10 +3,10 @@
     v-if="videos"
     class="flex gap-5 flex-wrap md:justify-start justify-center"
   >
-    <div v-for="video of videos">
+    <div v-for="video of videos" class="w-full md:w-fit">
       <div
         @click="startParty(video._id)"
-        class="w-[240px] group cursor-pointer relative h-[140px] border flex flex-col justify-center items-center rounded-2xl"
+        class="md:w-[240px] w-full group cursor-pointer relative h-[140px] border flex flex-col justify-center items-center rounded-2xl"
       >
         <img
           src="https://www.creativefabrica.com/wp-content/uploads/2020/02/10/Video-Graphics-1-580x387.png"
@@ -57,7 +57,7 @@ const startParty = async (id) => {
     const { data } = await axios.post("/party/", {
       videoId: id,
     });
-    
+
     router.push({ name: "Party", params: { id: data.code } });
   } catch (e) {
     toast.error(e);

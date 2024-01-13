@@ -81,3 +81,16 @@ module.exports.getUser = async (req, res, next) => {
     console.log(`Error in protectRoute: ${e.message}`);
   }
 };
+
+module.exports.getProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+
+    res.status(200).json(user);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+    console.log(`Error in protectRoute: ${e.message}`);
+  }
+};

@@ -27,6 +27,21 @@ app.use("/api/users", userRoutes);
 app.use("/api/videos", videoRoutes);
 app.use("/api/party", partyRoutes);
 
+const io = require("socket.io")(3000, {
+  cors: {
+    origin: ["http://localhost:5173"],
+  },
+});
+
+io.on("connection", (socket) => {
+  socket.on("joined", (partyId, userId) => {
+    io.emit("joined", partyId, userId);
+  });
+  socket.on("leaved", (partyId, userId) => {
+    io.emit("leaved", partyId, userId);
+  });
+});
+
 const server = app.listen(PORT, () =>
   console.log(`Server is running on port ${PORT}`)
 );
