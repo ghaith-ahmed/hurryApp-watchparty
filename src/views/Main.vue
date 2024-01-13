@@ -36,12 +36,21 @@
           >
             <li>
               <router-link
+                :to="{ name: 'Home' }"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                aria-current="page"
+                >Home</router-link
+              >
+            </li>
+            <li>
+              <router-link
                 :to="{ name: 'Upload' }"
                 class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 aria-current="page"
                 >Upload video</router-link
               >
             </li>
+
             <li>
               <button
                 @click="user.logout"
@@ -62,7 +71,7 @@
     v-else
     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
   >
-    <FwbSpinner size="12" />
+    <FwbSpinner color="green" size="12" />
   </div>
 </template>
 

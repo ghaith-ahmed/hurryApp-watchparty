@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./db/connectDB");
 const userRoutes = require("./routes/userRoutes.js");
 const videoRoutes = require("./routes/videoRoutes.js");
+const partyRoutes = require("./routes/partyRoutes.js");
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
@@ -24,6 +25,7 @@ app.use(cookieParser());
 connectDB();
 app.use("/api/users", userRoutes);
 app.use("/api/videos", videoRoutes);
+app.use("/api/party", partyRoutes);
 
 const server = app.listen(PORT, () =>
   console.log(`Server is running on port ${PORT}`)

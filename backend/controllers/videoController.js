@@ -23,3 +23,29 @@ module.exports.uploadVideo = async (req, res) => {
     console.log(`Error in uploadVideo: ${e.message}`);
   }
 };
+
+module.exports.getVideos = async (req, res) => {
+  try {
+    const videos = await Video.find()
+      .sort("-createdAt")
+      .select("-url")
+      .populate("user_id");
+
+    res.status(200).json(videos);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(`Error in uploadVideo: ${e.message}`);
+  }
+};
+
+module.exports.getVideo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const video = await Video.findById(id).populate("user_id");
+
+    res.status(200).json(video);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(`Error in uploadVideo: ${e.message}`);
+  }
+};

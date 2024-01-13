@@ -3,7 +3,9 @@ import Login from "../views/Login.vue";
 import AuthLayout from "../views/AuthLayout.vue";
 import Register from "../views/Register.vue";
 import Main from "../views/Main.vue";
+import Home from "../views/Home.vue";
 import UploadVideo from "../views/UploadVideo.vue";
+import Party from "../views/Party.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -30,6 +32,7 @@ const router = createRouter({
     {
       name: "Main",
       path: "/main",
+      redirect: "/home",
       component: Main,
       meta: { requiresAuth: true },
       children: [
@@ -37,6 +40,16 @@ const router = createRouter({
           name: "Upload",
           path: "/upload",
           component: UploadVideo,
+        },
+        {
+          name: "Home",
+          path: "/home",
+          component: Home,
+        },
+        {
+          name: "Party",
+          path: "/party/:id",
+          component: Party,
         },
       ],
     },
