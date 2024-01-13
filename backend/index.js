@@ -40,6 +40,15 @@ io.on("connection", (socket) => {
   socket.on("leaved", (partyId, userId) => {
     io.emit("leaved", partyId, userId);
   });
+  socket.on("paused", (partyId) => {
+    io.emit("paused", partyId);
+  });
+  socket.on("play", (partyId) => {
+    io.emit("play", partyId);
+  });
+  socket.on("timeline", (partyId, userId, currentTime) => {
+    io.emit("timeline", partyId, userId, currentTime);
+  });
 });
 
 const server = app.listen(PORT, () =>

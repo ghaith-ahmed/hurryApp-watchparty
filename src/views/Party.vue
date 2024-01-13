@@ -2,7 +2,16 @@
   <div v-if="party">
     <div class="md:flex relative gap-2 justify-center items-start">
       <div class="w-full">
-        <video class="w-full" :src="party.video.url" controls></video>
+        <video
+          @pause="pauseVideo"
+          @play="playVideo"
+          @playing="changeTimeline"
+          class="w-full"
+          autoplay
+          :src="party.video.url"
+          ref="videoEle"
+          controls
+        ></video>
         <FwbButton @click="copyLink" class="mt-3 w-full" color="green"
           >Copy Party Link</FwbButton
         >
@@ -64,6 +73,7 @@ const party = ref();
 const route = useRoute();
 const router = useRouter();
 const socket = io("http://localhost:3000");
+const videoEle = ref();
 
 const getParty = async () => {
   try {
@@ -92,6 +102,21 @@ const getParty = async () => {
         );
       }
     });
+    socket.on("paused", (partyId) => {
+      if (partyId == party.value._id) {
+        videoEle.value.pause();
+      }
+    });
+    socket.on("play", (partyId) => {
+      if (partyId == party.value._id) {
+        videoEle.value.play();
+      }
+    });
+    socket.on("timeline", (partyId, userId, currentTime) => {
+      if (partyId == party.value._id && userId != user._id) {
+        videoEle.value.currentTime = +currentTime;
+      }
+    });
   } catch (e) {
     toast.error(e);
     console.log(e);
@@ -111,7 +136,6 @@ const copyLink = () => {
 
 const getUser = async (id) => {
   try {
-    console.log("gg");
     const { data } = await axios.get(`/users/get/${id}`);
 
     party.value.members.push(data);
@@ -134,6 +158,12 @@ const leaveParty = async () => {
     console.log(e);
   }
 };
+
+const pauseVideo = () => socket.emit("paused", party.value._id);
+const playVideo = () => socket.emit("play", party.value._id);
+
+const changeTimeline = (e) =>
+  socket.emit("timeline", party.value._id, user._id, e.timestamp / 1000);
 
 onMounted(getParty);
 </script>
