@@ -4,7 +4,7 @@
     alt=""
   >
     <h1 class="text-xs text-white truncate">
-      {{ user.name }}
+      {{ name ?? user.name }}
     </h1>
   </div>
 </template>
@@ -13,4 +13,5 @@
 import { useUserStore } from "@/stores/userStore";
 
 const { user } = useUserStore();
+defineProps(["name"]);
 </script>

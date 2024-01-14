@@ -36,7 +36,7 @@
         </svg>
       </div>
       <div class="flex gap-2 mt-2 items-start">
-        <img src="/profilePerson.png" class="w-8 rounded-full" alt="" />
+        <profilePic />
         <div class="font-medium dark:text-white">
           <h1>{{ video.title }}</h1>
           <p class="text-sm">{{ video.user_id.name }}</p>

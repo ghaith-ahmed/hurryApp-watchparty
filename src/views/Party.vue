@@ -12,6 +12,9 @@
           ref="videoEle"
           controls
         ></video>
+        <div>
+          <h1>{{ party.video.title }}</h1>
+        </div>
         <div class="flex flex-col gap-3">
           <FwbButton @click="copyLink" class="mt-3 w-full" color="green"
             >Copy Party Link</FwbButton

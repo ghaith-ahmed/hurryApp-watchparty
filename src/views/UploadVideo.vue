@@ -9,6 +9,7 @@
         >
         <input
           @change="handleVideoInput"
+          ref="fileInput"
           class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
           id="file_input"
           type="file"
@@ -40,10 +41,10 @@ const router = useRouter();
 const client = filestack.init("AK6ZcXc0TRbOJhNrbLzLVz");
 const file = ref();
 const fileToUpload = ref();
-const videoEle = ref();
 const title = ref("");
 const description = ref("");
 const textArea = ref();
+const fileInput = ref();
 
 const handleVideoInput = async (e) => {
   const selectedFile = e.target.files[0];
@@ -54,11 +55,11 @@ const handleVideoInput = async (e) => {
     reader.onload = (e) => {
       const src = e.target.result;
       file.value = src;
-      videoEle.value.load();
     };
 
     reader.readAsDataURL(selectedFile);
   } else {
+    fileInput.value.value = null;
     toast.error("Only video files are allowed !");
   }
 };

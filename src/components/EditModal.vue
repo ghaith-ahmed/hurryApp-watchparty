@@ -6,7 +6,7 @@
       <transition name="modal">
         <div v-if="video" class="absolute z-[22]">
           <div
-            class="dark:bg-[#181818] bg-white md:mx-auto md:w-[600px] w-[90dvw] flex flex-col gap-3 border dark:border-[#383939] rounded-xl p-6"
+            class="dark:bg-gray-900 dark:text-white bg-white md:mx-auto md:w-[600px] w-[90dvw] flex flex-col gap-3 border dark:border-[#383939] rounded-xl p-6"
           >
             <h1 class="text-center font-medium">{{ video.title }}</h1>
             <div class="flex flex-col gap-5 w-full mt-5">
