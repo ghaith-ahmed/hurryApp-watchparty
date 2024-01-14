@@ -1,6 +1,8 @@
 <template>
   <Toaster rich-colors close-button />
-  <RouterView />
+  <div class="h-dvh">
+    <RouterView />
+  </div>
 </template>
 
 <script setup>

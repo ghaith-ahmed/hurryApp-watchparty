@@ -55,17 +55,60 @@
                 :to="{ name: 'ManageUploads' }"
                 class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 aria-current="page"
-                >Manage uploads</router-link
+                >Your videos</router-link
               >
             </li>
-
-            <li>
+            <li class="flex items-center relative">
               <button
-                @click="user.logout"
-                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                ref="openBtn"
+                @click="openDropdown = !openDropdown"
+                class="block text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                type="button"
               >
-                Logout
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="16"
+                  class="dark:fill-white"
+                  width="14"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"
+                  />
+                </svg>
               </button>
+              <transition
+                enter-from-class="scale-0"
+                enter-active-class="transition origin-top-right"
+                enter-to-class="scale-100"
+              >
+                <div
+                  v-if="openDropdown"
+                  class="z-10 absolute top-8 right-0 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                >
+                  <ul
+                    class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                    aria-labelledby="dropdownDefaultButton"
+                  >
+                    <li>
+                      <a
+                        href="#"
+                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        >Switch theme</a
+                      >
+                    </li>
+                    <li>
+                      <button
+                        @click="user.logout"
+                        href="#"
+                        class="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </transition>
             </li>
           </ul>
         </div>
@@ -85,20 +128,37 @@
 
 <script setup>
 import { useUserStore } from "../stores/userStore";
-import { FwbButton, FwbSpinner } from "flowbite-vue";
+import { FwbButton, FwbSpinner, FwbDropdown } from "flowbite-vue";
 import axios from "../axios";
 import { toast } from "vue-sonner";
 import { useRouter, onBeforeRouteUpdate } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, onBeforeUnmount, ref } from "vue";
+import darkModeToggle from "./darkModeToggle.vue";
 
 const user = useUserStore();
 const router = useRouter();
 const mobileNav = ref(false);
+const openDropdown = ref(false);
+const openBtn = ref();
 
 onBeforeRouteUpdate((_, _2, next) => {
   mobileNav.value = false;
   next();
 });
 
-onMounted(user.getUser);
+onMounted(() => {
+  user.getUser();
+  document.addEventListener("click", closeDropDownWhenClicking);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", closeDropDownWhenClicking);
+});
+
+const closeDropDownWhenClicking = (event) => {
+  if (openBtn.value && !openBtn.value.contains(event.target)) {
+    openDropdown.value = false;
+    return;
+  }
+};
 </script>

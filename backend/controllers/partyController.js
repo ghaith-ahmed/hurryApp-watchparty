@@ -34,11 +34,12 @@ module.exports.getParty = async (req, res) => {
     const party = await Party.findOne({ code })
       .populate("host")
       .populate("video")
-      .populate("members");
+      .populate("members")
+      .populate("messages.sender_id", ["name"]);
 
     if (
       !party.members
-        .map((member) => member._id.toString())
+        ?.map((member) => member._id.toString())
         .includes(req.user._id.toString())
     ) {
       party.members.push(req.user._id);
@@ -60,19 +61,18 @@ module.exports.leaveParty = async (req, res) => {
 
     const party = await Party.findById(partyId);
 
-    if (
-      party.members
-        .map((member) => member.toString())
-        .includes(req.user._id.toString())
-    ) {
-      party.members = party.members.filter(
-        (member) => member.toString() != req.user._id.toString()
-      );
+    if (party.members) {
+      party.members =
+        party.members?.filter(
+          (member) => member.toString() != req.user._id.toString()
+        ) || [];
 
       await party.save();
-      if (party.members.length == 0) {
-        await Party.deleteOne({ _id: partyId });
-      }
+    } else {
+      await Party.deleteOne({ _id: partyId });
+    }
+
+    if (party.members.length == 0) {
     }
 
     res.sendStatus(200);
@@ -84,16 +84,15 @@ module.exports.leaveParty = async (req, res) => {
 
 module.exports.sendMessage = async (req, res) => {
   try {
-
     const { partyId, text } = req.body;
 
     if (!partyId || !text) return res.status(400);
 
     const party = await Party.findById(partyId);
 
-    party.messages.push({ sender_id: req.user._id, text })
+    party.messages.push({ sender_id: req.user._id, text });
 
-    await party.save()
+    await party.save();
     res.status(200);
   } catch (e) {
     res.status(500).json({ error: e.message });

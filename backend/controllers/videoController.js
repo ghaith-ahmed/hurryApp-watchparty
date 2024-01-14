@@ -24,6 +24,24 @@ module.exports.uploadVideo = async (req, res) => {
   }
 };
 
+module.exports.editVideo = async (req, res) => {
+  try {
+    const { id, title, description } = req.body;
+
+    const videoToEdit = await Video.findById(id);
+
+    videoToEdit.title = title;
+    if (description) videoToEdit.description = description;
+
+    await videoToEdit.save();
+
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(`Error in editVideo: ${e.message}`);
+  }
+};
+
 module.exports.getVideos = async (req, res) => {
   try {
     const videos = await Video.find()
@@ -41,7 +59,7 @@ module.exports.getVideos = async (req, res) => {
 module.exports.getVideo = async (req, res) => {
   try {
     const { id } = req.params;
-    const video = await Video.findById(id).populate("user_id");
+    const video = await Video.findById(id).populate("user_id", ["name"]);
 
     res.status(200).json(video);
   } catch (e) {
@@ -52,23 +70,23 @@ module.exports.getVideo = async (req, res) => {
 
 module.exports.getUserVideos = async (req, res) => {
   try {
-    const videos = await Video.find({ user_id: req.user._id })
+    const videos = await Video.find({ user_id: req.user._id });
 
     res.status(200).json(videos);
   } catch (e) {
     res.status(500).json({ error: e.message });
     console.log(`Error in uploadVideo: ${e.message}`);
   }
-}
+};
 module.exports.deleteVideo = async (req, res) => {
   try {
-    const { partyId } = req.params
+    const { partyId } = req.params;
 
-    await Video.deleteOne({ _id: partyId })
+    await Video.deleteOne({ _id: partyId });
 
     res.sendStatus(200);
   } catch (e) {
     res.status(500).json({ error: e.message });
     console.log(`Error in uploadVideo: ${e.message}`);
   }
-}
+};

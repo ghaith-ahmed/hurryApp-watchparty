@@ -1,6 +1,6 @@
 <template>
   <h2
-    class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+    class="mt-10 text-center dark:text-white text-2xl font-bold leading-9 tracking-tight text-gray-900"
   >
     Create an account
   </h2>
@@ -10,7 +10,7 @@
       <div>
         <label
           for="name"
-          class="block text-sm font-medium leading-6 text-gray-900"
+          class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
           >Name</label
         >
         <div class="mt-2">
@@ -21,14 +21,14 @@
             type="name"
             autocomplete="name"
             required
-            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
       </div>
       <div>
         <label
           for="email"
-          class="block text-sm font-medium leading-6 text-gray-900"
+          class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
           >Email address</label
         >
         <div class="mt-2">
@@ -39,7 +39,7 @@
             type="email"
             autocomplete="email"
             required
-            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
       </div>
@@ -48,7 +48,7 @@
         <div class="flex items-center justify-between">
           <label
             for="password"
-            class="block text-sm font-medium leading-6 text-gray-900"
+            class="block text-sm font-medium leading-6 text-gray-900 dark:text-white"
             >Password</label
           >
         </div>
@@ -60,7 +60,7 @@
             type="password"
             autocomplete="current-password"
             required
-            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
       </div>
