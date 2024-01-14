@@ -13,7 +13,11 @@ const path = require("path");
 
 app.use(
   cors({
-    origin: ["http://localhost:5000", "http://localhost:5173"],
+    origin: [
+      "http://localhost:5000",
+      "http://localhost:5173",
+      "https://watch-party-uvre.onrender.com",
+    ],
     credentials: true,
   })
 );
@@ -29,7 +33,7 @@ app.use("/api/party", partyRoutes);
 
 const io = require("socket.io")(3000, {
   cors: {
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://watch-party-uvre.onrender.com"],
   },
 });
 
