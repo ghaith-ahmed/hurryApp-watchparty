@@ -37,9 +37,11 @@
 import axios from "../axios";
 import { ref, onMounted } from "vue";
 import { toast } from "vue-sonner";
-import { FwbSpinner } from "flowbite-vue";
+import { FwbSpinner, FwbButton } from "flowbite-vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/userStore";
 
+const {user} = useUserStore()
 const router = useRouter();
 const videos = ref();
 

@@ -26,6 +26,18 @@ const partySchema = mongoose.Schema(
       ],
       default: [],
     },
+    messages: {
+      type: [{
+        sender_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "User"
+        },
+        text: {
+          type: String,
+        }
+      }]
+    }
   },
   {
     timestamps: true,

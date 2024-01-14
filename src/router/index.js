@@ -6,6 +6,7 @@ import Main from "../views/Main.vue";
 import Home from "../views/Home.vue";
 import UploadVideo from "../views/UploadVideo.vue";
 import Party from "../views/Party.vue";
+import ManageUploads from "../views/ManageUploads.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,6 +51,11 @@ const router = createRouter({
           name: "Party",
           path: "/party/:id",
           component: Party,
+        },
+        {
+          name: "ManageUploads",
+          path: "/manage",
+          component: ManageUploads,
         },
       ],
     },

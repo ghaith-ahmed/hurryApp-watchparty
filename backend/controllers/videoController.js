@@ -49,3 +49,26 @@ module.exports.getVideo = async (req, res) => {
     console.log(`Error in uploadVideo: ${e.message}`);
   }
 };
+
+module.exports.getUserVideos = async (req, res) => {
+  try {
+    const videos = await Video.find({ user_id: req.user._id })
+
+    res.status(200).json(videos);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(`Error in uploadVideo: ${e.message}`);
+  }
+}
+module.exports.deleteVideo = async (req, res) => {
+  try {
+    const { partyId } = req.params
+
+    await Video.deleteOne({ _id: partyId })
+
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(`Error in uploadVideo: ${e.message}`);
+  }
+}

@@ -2,45 +2,51 @@
   <div v-if="party">
     <div class="md:flex relative gap-2 justify-center items-start">
       <div class="w-full">
-        <video class="w-full" :src="party.video.url" controls></video>
-        <FwbButton @click="copyLink" class="mt-3 w-full" color="green"
-          >Copy Party Link</FwbButton
-        >
+        <video
+          @pause="pauseVideo"
+          @play="playVideo"
+          @seeked="changeTimeline"
+          @canplay="() => {
+            videoEle.play()
+          }"
+          class="w-full"
+          autoplay
+          :src="party.video.url"
+          ref="videoEle"
+          controls
+        ></video>
+        <div class="flex flex-col gap-3">
+          <FwbButton @click="copyLink" class="mt-3 w-full" color="green"
+            >Copy Party Link</FwbButton
+          >
+              <FwbButton
+              @click="leaveParty"
+              
+              color="red"
+              >Leave Party</FwbButton
+            >
+        </div>
       </div>
       <div
         class="md:w-1/2 w-full h-[80dvh] relative bg-gray-100 rounded-xl mt-2 md:mt-0"
       >
         <div class="flex w-full mb-3">
-          <button class="w-full hover:bg-gray-200 p-4 font-medium transition">
+          <button
+            @click="page = 'chat'"
+            class="w-full hover:bg-gray-200 p-4 font-medium transition"
+          >
             Chat
           </button>
-          <button class="w-full hover:bg-gray-200 p-4 font-medium transition">
+          <button
+            @click="page = 'members'"
+            class="w-full hover:bg-gray-200 p-4 font-medium transition"
+          >
             Members
           </button>
         </div>
-        <div class="flex flex-col gap-1">
-          <div
-            class="flex gap-2 justify-end items-center p-3 bg-emerald-700 text-white mx-3 rounded-2xl"
-            v-for="member of party.members"
-          >
-            <h1 class="font-medium">
-              {{ member._id == user._id ? "( You ) " : "" }}
-              {{ member.name ?? user.name }}
-            </h1>
-
-            <img
-              class="w-9 h-9 shrink-0 object-cover rounded-full"
-              :src="party.host.profilePic || personPic"
-              alt=""
-            />
-          </div>
-        </div>
-        <FwbButton
-          @click="leaveParty"
-          class="absolute bottom-0 w-full !rounded-t-none"
-          color="red"
-          >Leave Party</FwbButton
-        >
+        <Members v-if="page == 'members'" :members="party.members" />
+        <Chat @message-sent="sendMessageSocket" :party="party" v-else />
+    
       </div>
     </div>
   </div>
@@ -54,16 +60,21 @@ import axios from "../axios";
 import { ref, onMounted } from "vue";
 import { toast } from "vue-sonner";
 import { FwbSpinner, FwbButton } from "flowbite-vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute, onBeforeRouteLeave } from "vue-router";
 import personPic from "../../public/profilePerson.png";
 import { useUserStore } from "@/stores/userStore";
 import { io } from "socket.io-client";
+import Members from "../components/Members.vue";
+import Chat from "../components/Chat.vue";
 
 const { user } = useUserStore();
 const party = ref();
 const route = useRoute();
 const router = useRouter();
 const socket = io("http://localhost:3000");
+const videoEle = ref();
+const time = ref()
+const page = ref("members");
 
 const getParty = async () => {
   try {
@@ -79,7 +90,13 @@ const getParty = async () => {
       ) {
         getUser(userId);
       }
+      socket.emit("getTime", videoEle.value.currentTime, userId)
     });
+    socket.on("getTime", (time, userId) => {
+      if (user._id == userId) {
+        time.value = +time
+      }
+    })
     socket.on("leaved", (partyId, userId) => {
       if (
         partyId == party.value._id &&
@@ -90,6 +107,35 @@ const getParty = async () => {
         party.value.members = party.value.members.filter(
           (member) => member._id != userId
         );
+      }
+    });
+    socket.on("paused", (partyId) => {
+      if (partyId == party.value._id) {
+        videoEle.value.pause();
+      }
+    });
+    socket.on("play", (partyId) => {
+      if (partyId == party.value._id) {
+        videoEle.value.play();
+      }
+    });
+    socket.on("timeline", (partyId, userId, currentTime, isPaused) => {
+      if (partyId == party.value._id && userId != user._id) {
+            if (Math.abs(videoEle.value.currentTime - currentTime) > 1) {
+          videoEle.value.currentTime = +currentTime;
+        }
+            if (videoEle.value.paused !== isPaused) {
+          if (isPaused) {
+            videoEle.value.pause();
+          } else {
+            videoEle.value.play();
+          }
+        }
+      }
+    });
+    socket.on("message-sent", (message) => {
+      if (message.partyId == party.value._id && message.sender_id != user._id) {
+        party.value.messages.push(message)
       }
     });
   } catch (e) {
@@ -111,7 +157,6 @@ const copyLink = () => {
 
 const getUser = async (id) => {
   try {
-    console.log("gg");
     const { data } = await axios.get(`/users/get/${id}`);
 
     party.value.members.push(data);
@@ -134,6 +179,31 @@ const leaveParty = async () => {
     console.log(e);
   }
 };
+
+onBeforeRouteLeave(async (to, from, next) => { leaveParty(); next()})
+
+const changeTimeline = () => {
+  socket.emit(
+    "timeline",
+    party.value._id,
+    user._id,
+    videoEle.value.currentTime,
+    videoEle.value.paused
+  );
+};
+
+const pauseVideo = () => {
+  changeTimeline()
+  socket.emit("paused", party.value._id)
+};
+const playVideo = () => {
+  changeTimeline()
+  socket.emit("play", party.value._id)
+};
+
+
+
+const sendMessageSocket = (message) => {socket.emit("message-sent", message)}
 
 onMounted(getParty);
 </script>

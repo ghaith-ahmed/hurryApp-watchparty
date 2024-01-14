@@ -81,3 +81,22 @@ module.exports.leaveParty = async (req, res) => {
     console.log(`Error in getParty: ${e.message}`);
   }
 };
+
+module.exports.sendMessage = async (req, res) => {
+  try {
+
+    const { partyId, text } = req.body;
+
+    if (!partyId || !text) return res.status(400);
+
+    const party = await Party.findById(partyId);
+
+    party.messages.push({ sender_id: req.user._id, text })
+
+    await party.save()
+    res.status(200);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(`Error in getParty: ${e.message}`);
+  }
+};
