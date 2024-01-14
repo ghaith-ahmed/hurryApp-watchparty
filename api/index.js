@@ -33,13 +33,11 @@ app.use("/api/party", partyRoutes);
 
 const __dirname1 = path.resolve();
 
+app.use(express.static(path.join(__dirname1, "/build")));
 
-  app.use(express.static(path.join(__dirname1, "/build")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname1, "build", "index.html"));
-  });
-
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname1, "build", "index.html"));
+});
 
 const io = require("socket.io")(3000, {
   pingTimeout: 60000,
