@@ -11,7 +11,11 @@
 
       <img
         class="w-9 h-9 shrink-0 object-cover rounded-full"
+<<<<<<< HEAD
         :src="member.profilePic || personPic"
+=======
+        :src="party.host.profilePic || personPic"
+>>>>>>> 6a36ef3539812d08a4cd154c89e2aad7208d738e
         alt=""
       />
     </div>
