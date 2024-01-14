@@ -68,7 +68,7 @@ const { user } = useUserStore();
 const party = ref();
 const route = useRoute();
 const router = useRouter();
-const socket = io("http://localhost:3000");
+const socket = io("https://watch-party-uvre.onrender.com");
 const videoEle = ref();
 const time = ref();
 const page = ref("members");
@@ -136,7 +136,7 @@ const getParty = async () => {
 
 const copyLink = () => {
   navigator.clipboard
-    .writeText(`http://localhost:5173/party/${route.params.id}`)
+    .writeText(`https://watch-party-uvre.onrender.com/party/${route.params.id}`)
     .then(() => {
       toast.success("Link Copied");
     })
