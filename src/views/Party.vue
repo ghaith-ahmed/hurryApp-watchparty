@@ -68,7 +68,9 @@ const { user } = useUserStore();
 const party = ref();
 const route = useRoute();
 const router = useRouter();
-const socket = io("https://watch-party-uvre.onrender.com");
+const socket = io("https://watch-party-uvre.onrender.com", {
+  autoConnect: false,
+});
 const videoEle = ref();
 const time = ref();
 const page = ref("members");
