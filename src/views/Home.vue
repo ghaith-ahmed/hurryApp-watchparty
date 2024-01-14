@@ -1,4 +1,7 @@
 <template>
+  <h1 class="font-medium dark:text-white text-2xl mb-4">
+    What do you wanna watch today ?
+  </h1>
   <div
     v-if="videos"
     class="flex gap-5 animate-fade-in-down flex-wrap md:justify-start justify-center"

@@ -58,7 +58,25 @@
                 >Your videos</router-link
               >
             </li>
-            <li class="flex items-center relative">
+            <li class="md:hidden">
+              <button
+                @click="switchTheme"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                aria-current="page"
+              >
+                Switch theme
+              </button>
+            </li>
+            <li class="md:hidden">
+              <button
+                @click="logout"
+                class="py-2 block px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                aria-current="page"
+              >
+                Logout
+              </button>
+            </li>
+            <li class="md:flex hidden items-center relative">
               <button
                 ref="openBtn"
                 @click="openDropdown = !openDropdown"
@@ -91,11 +109,12 @@
                     aria-labelledby="dropdownDefaultButton"
                   >
                     <li>
-                      <a
-                        href="#"
-                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >Switch theme</a
+                      <button
+                        @click="switchTheme"
+                        class="block px-4 w-full text-left py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
+                        Switch theme
+                      </button>
                     </li>
                     <li>
                       <button
@@ -140,6 +159,16 @@ const router = useRouter();
 const mobileNav = ref(false);
 const openDropdown = ref(false);
 const openBtn = ref();
+
+const switchTheme = () => {
+  if (document.body.classList.contains("dark")) {
+    document.body.classList.remove("dark");
+    localStorage.setItem("dark", false);
+  } else {
+    document.body.classList.add("dark");
+    localStorage.setItem("dark", true);
+  }
+};
 
 onBeforeRouteUpdate((_, _2, next) => {
   mobileNav.value = false;

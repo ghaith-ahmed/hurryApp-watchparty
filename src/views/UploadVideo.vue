@@ -5,7 +5,7 @@
         <label
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           for="file_input"
-          >Choose your video</label
+          >Choose your video ( 20mb mix size )</label
         >
         <input
           @change="handleVideoInput"
@@ -23,7 +23,10 @@
           class="resize-none"
           v-model="description"
         ></FwbTextarea>
-        <FwbButton class="w-full" @click="uploadVideo">Upload</FwbButton>
+        <FwbButton class="w-full" @click="uploadVideo">
+          <p v-if="!loading">Upload</p>
+          <FwbSpinner v-else class="w-full mx-auto" color="white"
+        /></FwbButton>
       </div>
     </div>
   </div>
@@ -33,7 +36,7 @@
 import * as filestack from "filestack-js";
 import { ref } from "vue";
 import { toast } from "vue-sonner";
-import { FwbInput, FwbTextarea, FwbButton } from "flowbite-vue";
+import { FwbInput, FwbTextarea, FwbButton, FwbSpinner } from "flowbite-vue";
 import axios from "../axios";
 import { useRouter } from "vue-router";
 
@@ -43,8 +46,8 @@ const file = ref();
 const fileToUpload = ref();
 const title = ref("");
 const description = ref("");
-const textArea = ref();
 const fileInput = ref();
+const loading = ref(false);
 
 const handleVideoInput = async (e) => {
   const selectedFile = e.target.files[0];
@@ -65,6 +68,7 @@ const handleVideoInput = async (e) => {
 };
 
 const uploadVideo = async () => {
+  loading.value = true;
   try {
     if (!title.value) return toast.error("You have to provide a title !");
     const { url } = await client.upload(fileToUpload.value);
@@ -79,6 +83,8 @@ const uploadVideo = async () => {
   } catch (e) {
     toast.error(e);
     console.log(e);
+  } finally {
+    loading.value = false;
   }
 };
 </script>

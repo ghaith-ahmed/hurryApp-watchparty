@@ -12,8 +12,11 @@
           ref="videoEle"
           controls
         ></video>
-        <div>
-          <h1>{{ party.video.title }}</h1>
+        <div class="mt-3 flex items-center gap-3">
+          <profilePic :name="party.video.name" />
+          <div class="flex flex-col gap-2 w-full">
+            <h1 class="dark:text-white font-medium">{{ party.video.title }}</h1>
+          </div>
         </div>
         <div class="flex flex-col gap-3">
           <FwbButton @click="copyLink" class="mt-3 w-full" color="green"
