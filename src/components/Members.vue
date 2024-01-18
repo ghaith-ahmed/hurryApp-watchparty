@@ -1,38 +1,33 @@
 <template>
-  <div class="flex flex-col gap-1">
-    <div
-      class="flex gap-2 justify-between items-center p-3 bg-emerald-700 text-white mx-3 rounded-2xl"
-      v-for="member of members"
+  <div
+    class="flex gap-2 justify-between items-center p-3 bg-emerald-700 text-white mx-3 rounded-2xl"
+  >
+    <FwbButton
+      :disabled="disabled"
+      v-if="member._id == user._id"
+      color="blue"
+      class="disabled:!bg-red-500 transition disabled:!opacity-70"
+      @click="confetti"
     >
-      <FwbButton
-        v-if="member._id == user._id"
-        color="blue"
-        @click="$emit('confetti')"
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="16"
+        width="16"
+        viewBox="0 0 512 512"
+        class="fill-white"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="16"
-          width="16"
-          viewBox="0 0 512 512"
-          class="fill-white"
-        >
-          <path
-            d="M190.5 68.8L225.3 128H224 152c-22.1 0-40-17.9-40-40s17.9-40 40-40h2.2c14.9 0 28.8 7.9 36.3 20.8zM64 88c0 14.4 3.5 28 9.6 40H32c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32H480c17.7 0 32-14.3 32-32V160c0-17.7-14.3-32-32-32H438.4c6.1-12 9.6-25.6 9.6-40c0-48.6-39.4-88-88-88h-2.2c-31.9 0-61.5 16.9-77.7 44.4L256 85.5l-24.1-41C215.7 16.9 186.1 0 154.2 0H152C103.4 0 64 39.4 64 88zm336 0c0 22.1-17.9 40-40 40H288h-1.3l34.8-59.2C329.1 55.9 342.9 48 357.8 48H360c22.1 0 40 17.9 40 40zM32 288V464c0 26.5 21.5 48 48 48H224V288H32zM288 512H432c26.5 0 48-21.5 48-48V288H288V512z"
-          />
-        </svg>
-      </FwbButton>
-      <div v-else></div>
-      <div class="flex gap-2 justify-end items-center">
-        <h1 class="font-medium">
-          {{ member._id == user._id ? "( You ) " : "" }}
-          {{ member.name ?? user.name }}
-        </h1>
-        <img
-          class="w-9 h-9 shrink-0 object-cover rounded-full"
-          :src="member.profilePic || personPic"
-          alt=""
+        <path
+          d="M190.5 68.8L225.3 128H224 152c-22.1 0-40-17.9-40-40s17.9-40 40-40h2.2c14.9 0 28.8 7.9 36.3 20.8zM64 88c0 14.4 3.5 28 9.6 40H32c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32H480c17.7 0 32-14.3 32-32V160c0-17.7-14.3-32-32-32H438.4c6.1-12 9.6-25.6 9.6-40c0-48.6-39.4-88-88-88h-2.2c-31.9 0-61.5 16.9-77.7 44.4L256 85.5l-24.1-41C215.7 16.9 186.1 0 154.2 0H152C103.4 0 64 39.4 64 88zm336 0c0 22.1-17.9 40-40 40H288h-1.3l34.8-59.2C329.1 55.9 342.9 48 357.8 48H360c22.1 0 40 17.9 40 40zM32 288V464c0 26.5 21.5 48 48 48H224V288H32zM288 512H432c26.5 0 48-21.5 48-48V288H288V512z"
         />
-      </div>
+      </svg>
+    </FwbButton>
+    <div v-else></div>
+    <div class="flex gap-2 justify-end items-center">
+      <h1 class="font-medium">
+        {{ member._id == user._id ? "( You ) " : "" }}
+        {{ member.name ?? user.name }}
+      </h1>
+      <profilePic :name="member.name" />
     </div>
   </div>
 </template>
@@ -41,7 +36,18 @@
 import personPic from "../../public/profilePerson.png";
 import { useUserStore } from "@/stores/userStore";
 import { FwbButton } from "flowbite-vue";
+import { ref } from "vue";
 
 const { user } = useUserStore();
-defineProps(["members"]);
+defineProps(["member"]);
+const emit = defineEmits(["confetti"]);
+const disabled = ref(false);
+
+const confetti = () => {
+  emit("confetti");
+  disabled.value = true;
+  setTimeout(() => {
+    disabled.value = false;
+  }, 5000);
+};
 </script>

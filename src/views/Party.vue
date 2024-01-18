@@ -6,7 +6,7 @@
           @pause="pauseVideo"
           @play="playVideo"
           @seeked="changeTimeline"
-          class="w-full"
+          class="w-full h-full"
           autoplay
           :src="party.video.url"
           ref="videoEle"
@@ -42,11 +42,13 @@
             Members
           </button>
         </div>
-        <Members
-          @confetti="triggerConfetti"
-          v-if="page == 'members'"
-          :members="party.members"
-        />
+        <div v-if="page == 'members'" class="flex flex-col gap-1">
+          <Members
+            v-for="member of party.members"
+            @confetti="triggerConfetti"
+            :member="member"
+          />
+        </div>
         <Chat @message-sent="sendMessageSocket" :party="party" v-else />
       </div>
     </div>
@@ -208,7 +210,7 @@ const pauseVideo = () => {
   changeTimeline();
   socket.emit("paused", party.value._id);
 };
-const playVideo = (e) => {
+const playVideo = () => {
   changeTimeline();
   socket.emit("play", party.value._id);
 };
