@@ -47,6 +47,7 @@ const io = require("socket.io")(3000, {
 });
 
 io.on("connection", (socket) => {
+  console.log(socket.id);
   socket.on("joined", (partyId, userId) => {
     socket.join(partyId);
     io.to(partyId).emit("joined", partyId, userId);
