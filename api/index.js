@@ -33,13 +33,19 @@ app.use("/api/party", partyRoutes);
 
 const __dirname1 = path.resolve();
 
-app.use(express.static(path.join(__dirname1, "/build")));
+if (process.env.NODE_ENV == "production") {
+  app.use(express.static(path.join(__dirname1, "/build")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname1, "build", "index.html"));
-});
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname1, "build", "index.html"));
+  });
+}
 
-const io = require("socket.io")(3000, {
+const server = app.listen(PORT, () =>
+  console.log(`Server is running on port ${PORT}`)
+);
+
+const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
     origin: ["http://localhost:5173", "https://watch-party-uvre.onrender.com"],
@@ -47,7 +53,6 @@ const io = require("socket.io")(3000, {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id);
   socket.on("joined", (partyId, userId) => {
     socket.join(partyId);
     io.to(partyId).emit("joined", partyId, userId);
@@ -68,7 +73,3 @@ io.on("connection", (socket) => {
     io.to(message.partyId).emit("message-sent", message);
   });
 });
-
-const server = app.listen(PORT, () =>
-  console.log(`Server is running on port ${PORT}`)
-);
