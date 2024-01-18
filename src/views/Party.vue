@@ -123,7 +123,10 @@ const getParty = async () => {
       videoEle.value.play();
     });
     socket.on("timeline", (partyId, userId, currentTime, isPaused) => {
-      if (Math.abs(videoEle.value.currentTime - currentTime) > 1) {
+      if (
+        Math.abs(videoEle.value.currentTime - currentTime) > 1 &&
+        userId != user._id
+      ) {
         videoEle.value.currentTime = +currentTime;
       }
     });

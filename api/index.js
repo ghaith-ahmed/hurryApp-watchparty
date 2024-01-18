@@ -44,10 +44,7 @@ if (process.env.NODE_ENV == "production") {
 // const io = require("socket.io")(3000, {
 //   pingTimeout: 60000,
 //   cors: {
-//     origin: [
-//       "http://localhost:5173",
-//       "https://watch-party-uvre.onrender.com",
-//     ],
+//     origin: ["http://localhost:5173", "https://watch-party-uvre.onrender.com"],
 //   },
 // });
 
@@ -75,10 +72,6 @@ if (process.env.NODE_ENV == "production") {
 //     io.to(partyId).emit("confetti");
 //   });
 // });
-
-// const server = app.listen(PORT, () =>
-//   console.log(`Server is running on port ${PORT}`)
-// );
 
 const server = app.listen(PORT, () =>
   console.log(`Server is running on port ${PORT}`)
@@ -110,5 +103,8 @@ io.on("connection", (socket) => {
   });
   socket.on("message-sent", (message) => {
     io.to(message.partyId).emit("message-sent", message);
+  });
+  socket.on("confetti", (partyId) => {
+    io.to(partyId).emit("confetti");
   });
 });
