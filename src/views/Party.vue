@@ -1,5 +1,6 @@
 <template>
   <div v-if="party">
+
     <div class="md:flex relative gap-2 justify-center items-start">
       <div class="w-full">
         <video
@@ -68,9 +69,15 @@ const { user } = useUserStore();
 const party = ref();
 const route = useRoute();
 const router = useRouter();
-const socket = io("https://watch-party-uvre.onrender.com", {
-  autoConnect: false,
-});
+const production = false;
+const socket = io(
+  production
+    ? "https://watch-party-uvre.onrender.com"
+    : "http://localhost:3000",
+  {
+    autoConnect: false,
+  }
+);
 const videoEle = ref();
 const time = ref();
 const page = ref("members");
@@ -191,7 +198,7 @@ const pauseVideo = () => {
   changeTimeline();
   socket.emit("paused", party.value._id);
 };
-const playVideo = () => {
+const playVideo = (e) => {
   changeTimeline();
   socket.emit("play", party.value._id);
 };

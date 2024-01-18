@@ -41,35 +41,76 @@ if (process.env.NODE_ENV == "production") {
   });
 }
 
-const server = app.listen(PORT, () =>
-  console.log(`Server is running on port ${PORT}`)
-);
+if (process.env.NODE_ENV != "production") {
+  const io = require("socket.io")(3000, {
+    pingTimeout: 60000,
+    cors: {
+      origin: [
+        "http://localhost:5173",
+        "https://watch-party-uvre.onrender.com",
+      ],
+    },
+  });
 
-const io = require("socket.io")(server, {
-  pingTimeout: 60000,
-  cors: {
-    origin: ["http://localhost:5173", "https://watch-party-uvre.onrender.com"],
-  },
-});
+  io.on("connection", (socket) => {
+    socket.on("joined", (partyId, userId) => {
+      socket.join(partyId);
+      io.to(partyId).emit("joined", partyId, userId);
+    });
+    socket.on("leaved", (partyId, userId) => {
+      io.to(partyId).emit("leaved", partyId, userId);
+    });
+    socket.on("paused", (partyId) => {
+      io.to(partyId).emit("paused", partyId);
+    });
+    socket.on("play", (partyId) => {
+      io.to(partyId).emit("play", partyId);
+    });
+    socket.on("timeline", (partyId, userId, currentTime, isPaused) => {
+      io.to(partyId).emit("timeline", partyId, userId, currentTime, isPaused);
+    });
+    socket.on("message-sent", (message) => {
+      io.to(message.partyId).emit("message-sent", message);
+    });
+  });
 
-io.on("connection", (socket) => {
-  socket.on("joined", (partyId, userId) => {
-    socket.join(partyId);
-    io.to(partyId).emit("joined", partyId, userId);
+  const server = app.listen(PORT, () =>
+    console.log(`Server is running on port ${PORT}`)
+  );
+} else {
+  const server = app.listen(PORT, () =>
+    console.log(`Server is running on port ${PORT}`)
+  );
+
+  const io = require("socket.io")(server, {
+    pingTimeout: 60000,
+    cors: {
+      origin: [
+        "http://localhost:5173",
+        "https://watch-party-uvre.onrender.com",
+      ],
+    },
   });
-  socket.on("leaved", (partyId, userId) => {
-    io.to(partyId).emit("leaved", partyId, userId);
+
+  io.on("connection", (socket) => {
+    socket.on("joined", (partyId, userId) => {
+      socket.join(partyId);
+      io.to(partyId).emit("joined", partyId, userId);
+    });
+    socket.on("leaved", (partyId, userId) => {
+      io.to(partyId).emit("leaved", partyId, userId);
+    });
+    socket.on("paused", (partyId) => {
+      io.to(partyId).emit("paused", partyId);
+    });
+    socket.on("play", (partyId) => {
+      io.to(partyId).emit("play", partyId);
+    });
+    socket.on("timeline", (partyId, userId, currentTime, isPaused) => {
+      io.to(partyId).emit("timeline", partyId, userId, currentTime, isPaused);
+    });
+    socket.on("message-sent", (message) => {
+      io.to(message.partyId).emit("message-sent", message);
+    });
   });
-  socket.on("paused", (partyId) => {
-    io.to(partyId).emit("paused", partyId);
-  });
-  socket.on("play", (partyId) => {
-    io.to(partyId).emit("play", partyId);
-  });
-  socket.on("timeline", (partyId, userId, currentTime, isPaused) => {
-    io.to(partyId).emit("timeline", partyId, userId, currentTime, isPaused);
-  });
-  socket.on("message-sent", (message) => {
-    io.to(message.partyId).emit("message-sent", message);
-  });
-});
+}

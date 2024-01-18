@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const production = true;
+const production = false;
 
 const instance = axios.create({
   withCredentials: true,
