@@ -11,6 +11,8 @@
   "dependencies": {
     "@cloudinary/url-gen": "^1.15.0",
     "@cloudinary/vue": "^1.11.2",
+    "@tsparticles/slim": "^3.1.0",
+    "@tsparticles/vue3": "^3.0.0",
     "axios": "^1.6.5",
     "filestack-js": "^3.29.0",
     "flowbite": "^2.2.1",

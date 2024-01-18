@@ -1,6 +1,5 @@
 <template>
   <div v-if="party">
-
     <div class="md:flex relative gap-2 justify-center items-start">
       <div class="w-full">
         <video
@@ -43,7 +42,11 @@
             Members
           </button>
         </div>
-        <Members v-if="page == 'members'" :members="party.members" />
+        <Members
+          @confetti="triggerConfetti"
+          v-if="page == 'members'"
+          :members="party.members"
+        />
         <Chat @message-sent="sendMessageSocket" :party="party" v-else />
       </div>
     </div>
@@ -69,7 +72,7 @@ const { user } = useUserStore();
 const party = ref();
 const route = useRoute();
 const router = useRouter();
-const production = false;
+const production = true;
 const socket = io(
   production
     ? "https://watch-party-uvre.onrender.com"
@@ -136,6 +139,13 @@ const getParty = async () => {
             ],
         });
       }
+    });
+    socket.on("confetti", () => {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
     });
   } catch (e) {
     toast.error(e);
@@ -205,6 +215,15 @@ const playVideo = (e) => {
 
 const sendMessageSocket = (message) => {
   socket.emit("message-sent", message);
+};
+
+const triggerConfetti = () => {
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 },
+  });
+  socket.emit("confetti", party.value._id);
 };
 
 onMounted(getParty);

@@ -40,6 +40,7 @@
   <div v-else class="flex justify-center mt-10">
     <FwbSpinner size="12" color="green" />
   </div>
+  <Confetti />
 </template>
 
 <script setup>

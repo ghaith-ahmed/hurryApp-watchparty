@@ -72,6 +72,9 @@ if (process.env.NODE_ENV != "production") {
     socket.on("message-sent", (message) => {
       io.to(message.partyId).emit("message-sent", message);
     });
+    socket.on("confetti", (partyId) => {
+      io.to(partyId).emit("confetti");
+    });
   });
 
   const server = app.listen(PORT, () =>

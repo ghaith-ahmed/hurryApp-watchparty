@@ -23,9 +23,9 @@
           class="resize-none"
           v-model="description"
         ></FwbTextarea>
-        <FwbButton class="w-full" @click="uploadVideo">
+        <FwbButton class="w-full flex justify-center" @click="uploadVideo">
           <p v-if="!loading">Upload</p>
-          <FwbSpinner v-else class="w-full mx-auto" color="white"
+          <FwbSpinner v-else class="" color="white"
         /></FwbButton>
       </div>
     </div>
