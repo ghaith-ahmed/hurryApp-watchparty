@@ -18,6 +18,7 @@ app.use(Particles, {
     await loadSlim(engine); // or you can load the slim version from "@tsparticles/slim" if don't need Shapes or Animations
   },
 });
+
 app.component("profilePic", profileDiv);
 
 app.mount("#app");

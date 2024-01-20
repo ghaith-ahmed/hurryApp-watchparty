@@ -123,16 +123,9 @@ const getParty = async () => {
       videoEle.value.play();
     });
     socket.on("timeline", (partyId, userId, currentTime, isPaused) => {
-      if (videoEle.value && videoEle.value.readyState >= 2) {
-        if (
-          Math.abs(videoEle.value.currentTime - currentTime) > 1 &&
-          userId !== user._id
-        ) {
-          if (!isPaused && videoEle.value.paused) {
-            videoEle.value.play();
-          }
-          videoEle.value.currentTime = +currentTime;
-        }
+      if (Math.abs(videoEle.value.currentTime - currentTime) > 1) {
+        videoEle.value.play();
+        videoEle.value.currentTime = +currentTime;
       }
     });
     socket.on("message-sent", (message) => {
